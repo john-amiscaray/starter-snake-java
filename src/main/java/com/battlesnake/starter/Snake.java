@@ -183,10 +183,11 @@ public class Snake {
     		ArrayNode array = (ArrayNode) js;
     		for(int i = 0; i < array.size(); i++) {
     			
-    			JsonNode x = array.get("x");
-    			JsonNode y = array.get("y");
+    			JsonNode arrayObject = array.get(i);
+    			JsonNode x = arrayObject.get("x");
+    			JsonNode y = arrayObject.get("y");
     			
-    			LOG.info("EXEC #" + i + "Coords may be x:{} y: {}", x ,y);
+    			LOG.info("EXEC #" + i + " Coords may be x:{} y: {}", x ,y);
     			
     		}
     		
