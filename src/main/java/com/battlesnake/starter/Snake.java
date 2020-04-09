@@ -118,7 +118,7 @@ public class Snake {
             LOG.info("START");
 
             Map<String, String> response = new HashMap<>();
-            response.put("color", "#00FF00");
+            response.put("color", "#800000");
             response.put("headType", "pixel");
             response.put("tailType", "bolt");
             return response;
@@ -179,13 +179,19 @@ public class Snake {
     		ArrayNode array = (ArrayNode) js;
     		for(int x = 0; x < array.size(); x++) {
     			JsonNode arrayElement = array.get(x);
-    			LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    			LOG.info(Integer.toString(arrayElement.intValue()));
-    			LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    			
+    			LOG.info("ARRAY ELEMENT IS: " + arrayElement.asInt() + "---------------");
+    			
     		}
     		
     	}//if
     	
+    	
+    	
+    }//get
+
+}
+
     	
     	
     }//get
