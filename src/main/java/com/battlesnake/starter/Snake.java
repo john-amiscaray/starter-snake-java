@@ -3,6 +3,10 @@ package com.battlesnake.starter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import jdk.internal.jline.internal.Log;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -174,7 +178,14 @@ public class Snake {
     	
     	if(js.isArray()) {
     		
-    		LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    		ArrayNode array = (ArrayNode) js;
+    		for(int x = 0; x < array.size(); x++) {
+    			JsonNode arrayElement = array.get(x);
+    			LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    			LOG.info(arrayElement.asText());
+    			LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    		}
+    		
     	}//if
     	
     	
@@ -182,3 +193,4 @@ public class Snake {
     }//get
 
 }
+
