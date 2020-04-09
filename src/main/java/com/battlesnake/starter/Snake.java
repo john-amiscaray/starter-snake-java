@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,14 +144,12 @@ public class Snake {
          */
         public Map<String, String> move(JsonNode moveRequest) {
         	
-        	JsonNode foodArray = moveRequest.at("/board/food");
-        	width = moveRequest.at("/board/width").intValue();
-        	height = moveRequest.at("/board/height").intValue();
-        	getBodyAndHead(moveRequest.at("/you/body"));
+            JsonNode foodArray = moveRequest.at("/board/food");
+            width = moveRequest.at("/board/width").intValue();
+            height = moveRequest.at("/board/height").intValue();
+            getBodyAndHead(moveRequest.at("/you/body"));
             findAllFood(foodArray);
-            Point p = findNearestFood();
-            
-            //LOG.info("NEAREST FOOD IS AT x:{} y:{} ", p.x, p.y);
+            findNearestFood();
             
             String[] possibleMoves = { "up", "down", "left", "right" };
 
