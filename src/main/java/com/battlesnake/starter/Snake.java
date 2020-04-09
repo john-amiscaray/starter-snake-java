@@ -46,9 +46,9 @@ public class Snake {
     public static void main(String[] args) {
         String port = System.getProperty("PORT");
         if (port != null) {
-            LOG.info("Found system provided port: {}", port);
+            //LOG.info("Found system provided port: {}", port);
         } else {
-            LOG.info("Using default port: {}", port);
+           // LOG.info("Using default port: {}", port);
             port = "8080";
         }
         port(Integer.parseInt(port));
@@ -93,7 +93,7 @@ public class Snake {
                 } else {
                     throw new IllegalAccessError("Strange call made to the snake: " + uri);
                 }
-                LOG.info("Responding with: {}", JSON_MAPPER.writeValueAsString(snakeResponse));
+                //LOG.info("Responding with: {}", JSON_MAPPER.writeValueAsString(snakeResponse));
                 return snakeResponse;
             } catch (Exception e) {
                 LOG.warn("Something went wrong!", e);
@@ -152,14 +152,12 @@ public class Snake {
             findAllFood(foodArray);
             Point p = findNearestFood();
             
-            LOG.info("NEAREST FOOD IS AT x:{} y:{} ", p.x, p.y);
+            //LOG.info("NEAREST FOOD IS AT x:{} y:{} ", p.x, p.y);
             
             String[] possibleMoves = { "up", "down", "left", "right" };
 
              //Choose a direction to move to
             String move = possibleMoves[getAppropriateMovement()];
-
-            LOG.info("MOVE {}", move);
 
             Map<String, String> response = new HashMap<>();
             response.put("move", move);
@@ -253,17 +251,26 @@ public class Snake {
     
     public static int getAppropriateMovement() {
     	
+    	LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
+    			findNearestFood().x, findNearestFood().y);
+    	
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+    	
     	if(findNearestFood().x < HEAD_LOCATION.x) {
     		HEAD_LOCATION.x--;
+    		LOG.info("-----GOING LEFT-----");
     		return 2;
     	}else if(findNearestFood().x > HEAD_LOCATION.x) {
     		HEAD_LOCATION.x++;
+    		LOG.info("-----GOING RIGHT-----");
     		return 3;
     	}else if(findNearestFood().y < HEAD_LOCATION.y) {
     		HEAD_LOCATION.y--;
+    		LOG.info("-----GOING UP-----");
     		return 0;
     	}else if(findNearestFood().y > HEAD_LOCATION.y) {
     		HEAD_LOCATION.y++;
+    		LOG.info("-----GOING DOWN-----");
     		return 1;
     	}
     	return 0;
