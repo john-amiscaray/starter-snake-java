@@ -180,7 +180,7 @@ public class Snake {
     		for(int x = 0; x < array.size(); x++) {
     			JsonNode arrayElement = array.get(x);
     			LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    			LOG.info(arrayElement.asText());
+    			LOG.info(Integer.toString(arrayElement.intValue()));
     			LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     		}
     		
