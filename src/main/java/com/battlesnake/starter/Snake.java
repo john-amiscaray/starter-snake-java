@@ -144,7 +144,7 @@ public class Snake {
                 e.printStackTrace();
             }
             
-            //findNearestFood(js);
+            findNearestFood(js);
             String[] possibleMoves = { "up", "down", "left", "right" };
 
              //Choose a random direction to move in
@@ -186,6 +186,7 @@ public class Snake {
     			JsonNode arrayElement = array.get(x);
     			
     			msg += arrayElement.asInt();
+    			LOG.info("EXEC #" + x);
     			
     		}
     		
