@@ -1,22 +1,25 @@
 package com.battlesnake.starter;
 
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.post;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import static spark.Spark.port;
-import static spark.Spark.post;
-import static spark.Spark.get;
 
 /**
  * This is a simple Battlesnake server written in Java.
@@ -28,6 +31,7 @@ public class Snake {
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     private static final Handler HANDLER = new Handler();
     private static final Logger LOG = LoggerFactory.getLogger(Snake.class);
+    private static final ArrayList<Point> FOOD_LOCATIONS = new ArrayList<Point>();
 
     /**
      * Main entry point.
@@ -186,8 +190,9 @@ public class Snake {
     			JsonNode arrayObject = array.get(i);
     			JsonNode x = arrayObject.get("x");
     			JsonNode y = arrayObject.get("y");
+    			//FOOD_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
     			
-    			LOG.info("EXEC #" + i + " Coords may be x:{} y: {}", x ,y);
+    			LOG.info("EXEC #" + i + " Coords may be x:{} y: {}", x.intValue() ,y.intValue());
     			
     		}
     		
