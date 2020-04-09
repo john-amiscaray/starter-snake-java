@@ -116,8 +116,8 @@ public class Snake {
             LOG.info("START");
 
             Map<String, String> response = new HashMap<>();
-            response.put("color", "#800000");
-            response.put("headType", "pixel");
+            response.put("color", "#888888");
+            response.put("headType", "regular");
             response.put("tailType", "regular");
             return response;
         }
@@ -138,10 +138,11 @@ public class Snake {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-
+            JsonNode js = moveRequest.at("/board/food");
+            findNearestFood(js);
             String[] possibleMoves = { "up", "down", "left", "right" };
 
-            // Choose a random direction to move in
+             //Choose a random direction to move in
             int choice = new Random().nextInt(possibleMoves.length);
             String move = possibleMoves[choice];
 
@@ -168,5 +169,16 @@ public class Snake {
             return EMPTY;
         }
     }
+    
+    public static void findNearestFood(JsonNode js) {
+    	
+    	if(js.isArray()) {
+    		
+    		LOG.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    	}//if
+    	
+    	
+    	
+    }//get
 
 }
