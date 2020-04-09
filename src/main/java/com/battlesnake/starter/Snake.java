@@ -156,9 +156,8 @@ public class Snake {
             
             String[] possibleMoves = { "up", "down", "left", "right" };
 
-             //Choose a random direction to move in
-            int choice = new Random().nextInt(possibleMoves.length);
-            String move = possibleMoves[choice];
+             //Choose a direction to move to
+            String move = possibleMoves[getAppropriateMovement()];
 
             LOG.info("MOVE {}", move);
 
@@ -252,13 +251,23 @@ public class Snake {
     	
     }//findNearestFood
     
-//    public static int getAppropriateMovement() {
-//    	
-//    	if(findNearestFood().x < HEAD_LOCATION.x) {
-//    		
-//    		
-//    	}
-//    	
-//    }//getAppropriateMovement
+    public static int getAppropriateMovement() {
+    	
+    	if(findNearestFood().x < HEAD_LOCATION.x) {
+    		HEAD_LOCATION.x--;
+    		return 2;
+    	}else if(findNearestFood().x > HEAD_LOCATION.x) {
+    		HEAD_LOCATION.x++;
+    		return 3;
+    	}else if(findNearestFood().y < HEAD_LOCATION.y) {
+    		HEAD_LOCATION.y--;
+    		return 0;
+    	}else if(findNearestFood().y > HEAD_LOCATION.y) {
+    		HEAD_LOCATION.y++;
+    		return 1;
+    	}
+    	return 0;
+    	
+    }//getAppropriateMovement
 
 }//ENDOFCLASS
