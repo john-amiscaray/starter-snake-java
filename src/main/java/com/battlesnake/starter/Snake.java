@@ -152,7 +152,7 @@ public class Snake {
             findAllFood(foodArray);
             Point p = findNearestFood();
             
-            LOG.info("NEAREST FOOD IS AT x:{} y:{} ", p.getX(), p.getY());
+            LOG.info("NEAREST FOOD IS AT x:{} y:{} ", p.x, p.y);
             
             String[] possibleMoves = { "up", "down", "left", "right" };
 
@@ -251,5 +251,14 @@ public class Snake {
     	return FOOD_LOCATIONS.get(index);
     	
     }//findNearestFood
+    
+//    public static int getAppropriateMovement() {
+//    	
+//    	if(findNearestFood().x < HEAD_LOCATION.x) {
+//    		
+//    		
+//    	}
+//    	
+//    }//getAppropriateMovement
 
 }//ENDOFCLASS
