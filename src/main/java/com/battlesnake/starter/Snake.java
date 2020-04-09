@@ -177,22 +177,21 @@ public class Snake {
     
     public static void findNearestFood(JsonNode js) {
     	
-    	String msg = "THE ARRAY NUMBERS ARE: ";
     	
     	if(js.isArray()) {
     		
     		ArrayNode array = (ArrayNode) js;
-    		for(int x = 0; x < array.size(); x++) {
-    			JsonNode arrayElement = array.get(x);
+    		for(int i = 0; i < array.size(); i++) {
     			
-    			msg += arrayElement.asInt();
-    			LOG.info("EXEC #" + x);
+    			JsonNode x = array.get("x");
+    			JsonNode y = array.get("y");
+    			
+    			LOG.info("EXEC #" + i + "Coords may be x:{} y: {}", x ,y);
     			
     		}
     		
     	}//if
     	
-    	LOG.info(msg);
     	
     }//get
 
