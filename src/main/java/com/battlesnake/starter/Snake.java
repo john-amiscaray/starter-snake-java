@@ -191,9 +191,3 @@ public class Snake {
     }//get
 
 }
-
-    	
-    	
-    }//get
-
-}
