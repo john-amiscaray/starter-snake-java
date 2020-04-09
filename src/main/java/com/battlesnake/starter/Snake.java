@@ -118,7 +118,7 @@ public class Snake {
             LOG.info("START");
 
             Map<String, String> response = new HashMap<>();
-            response.put("color", "#800000");
+            response.put("color", "#00FF00");
             response.put("headType", "pixel");
             response.put("tailType", "bolt");
             return response;
