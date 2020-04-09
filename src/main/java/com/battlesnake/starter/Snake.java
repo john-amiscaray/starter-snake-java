@@ -6,6 +6,7 @@ import static spark.Spark.post;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -13,7 +14,6 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -31,10 +31,12 @@ public class Snake {
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     private static final Handler HANDLER = new Handler();
     private static final Logger LOG = LoggerFactory.getLogger(Snake.class);
-    private static final ArrayList<Point> FOOD_LOCATIONS = new ArrayList<Point>();
+    private static ArrayList<Point> FOOD_LOCATIONS = new ArrayList<Point>();
+    private static ArrayList<Integer> FOOD_DIS = new ArrayList<Integer>();
     private static int width, height;
     private static final Point HEAD_LOCATION = new Point();
     private static final ArrayList<Point> BODY_LOCATIONS = new ArrayList<Point>();
+    private static final Point NEAREST_FOOD = new Point();
 
     /**
      * Main entry point.
@@ -147,15 +149,11 @@ public class Snake {
         	width = moveRequest.at("/board/width").intValue();
         	height = moveRequest.at("/board/height").intValue();
         	getBodyAndHead(moveRequest.at("/you/body"));
-        	
-        	
-            try {
-                LOG.info("FOOD COORDS: {} ----------", JSON_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(foodArray));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            findAllFood(foodArray);
+            Point p = findNearestFood();
             
-            findNearestFood(foodArray);
+            LOG.info("NEAREST FOOD IS AT x:{} y:{} ", p.getX(), p.getY());
+            
             String[] possibleMoves = { "up", "down", "left", "right" };
 
              //Choose a random direction to move in
@@ -186,12 +184,14 @@ public class Snake {
         }
     }
     
-    public static void findNearestFood(JsonNode js) {
+    public static void findAllFood(JsonNode js) {
     	
     	
     	if(js.isArray()) {
     		
     		ArrayNode array = (ArrayNode) js;
+    		FOOD_LOCATIONS.clear();
+    		
     		for(int i = 0; i < array.size(); i++) {
     			
     			JsonNode arrayObject = array.get(i);
@@ -199,19 +199,19 @@ public class Snake {
     			JsonNode y = arrayObject.get("y");
     			FOOD_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
     			
-    			LOG.info("EXEC #" + i + " Food Coord may be x:{} y: {}", x.intValue() ,y.intValue());
+    			//LOG.info("EXEC #" + i + " Food Coord may be x:{} y: {}", x.intValue() ,y.intValue());
     			
     		}
     		
     	}//if
     	
     	
-    }//get
+    }//findAllFood
     
     public static void getBodyAndHead(JsonNode js) {
     	
     	if(js.isArray()) {
-    		
+    		BODY_LOCATIONS.clear();
     		if(js.size() == 1) {
     			
     			HEAD_LOCATION.x = js.get(0).get("x").intValue();
@@ -224,9 +224,9 @@ public class Snake {
     				JsonNode arrayObject = js.get(i);
     				JsonNode x = arrayObject.get("x");
     				JsonNode y = arrayObject.get("y");
-    				FOOD_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
-    				
-    				LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
+    				BODY_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
+
+    				//LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
     			
     			}//for
     		
@@ -235,5 +235,21 @@ public class Snake {
     	}//if
     	
     }//getBodyAndHead
+    
+    public static Point findNearestFood() {
+    	
+    	FOOD_DIS.clear();
+    	for(int i = 0; i < FOOD_LOCATIONS.size(); i++) {
+    		
+    		FOOD_DIS.add((int) Point.distance(HEAD_LOCATION.getX(), HEAD_LOCATION.getY(), 
+    				FOOD_LOCATIONS.get(i).getX() , FOOD_LOCATIONS.get(i).getX() ));
+    		
+    	}//for
+    	
+    	int index = FOOD_DIS.indexOf(Collections.min(FOOD_DIS));
+    	
+    	return FOOD_LOCATIONS.get(index);
+    	
+    }//findNearestFood
 
-}
+}//ENDOFCLASS
