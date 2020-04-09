@@ -32,6 +32,9 @@ public class Snake {
     private static final Handler HANDLER = new Handler();
     private static final Logger LOG = LoggerFactory.getLogger(Snake.class);
     private static final ArrayList<Point> FOOD_LOCATIONS = new ArrayList<Point>();
+    private static int width, height;
+    private static final Point HEAD_LOCATION = new Point();
+    private static final ArrayList<Point> BODY_LOCATIONS = new ArrayList<Point>();
 
     /**
      * Main entry point.
@@ -140,15 +143,19 @@ public class Snake {
          */
         public Map<String, String> move(JsonNode moveRequest) {
         	
-        	JsonNode js = moveRequest.at("/board/food");
+        	JsonNode foodArray = moveRequest.at("/board/food");
+        	width = moveRequest.at("/board/width").intValue();
+        	height = moveRequest.at("/board/height").intValue();
+        	getBodyAndHead(moveRequest.at("/you/body"));
+        	
         	
             try {
-                LOG.info("FOOD COORDS: {} ----------", JSON_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(js));
+                LOG.info("FOOD COORDS: {} ----------", JSON_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(foodArray));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
             
-            findNearestFood(js);
+            findNearestFood(foodArray);
             String[] possibleMoves = { "up", "down", "left", "right" };
 
              //Choose a random direction to move in
@@ -190,9 +197,9 @@ public class Snake {
     			JsonNode arrayObject = array.get(i);
     			JsonNode x = arrayObject.get("x");
     			JsonNode y = arrayObject.get("y");
-    			//FOOD_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
+    			FOOD_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
     			
-    			LOG.info("EXEC #" + i + " Coords may be x:{} y: {}", x.intValue() ,y.intValue());
+    			LOG.info("EXEC #" + i + " Food Coord may be x:{} y: {}", x.intValue() ,y.intValue());
     			
     		}
     		
@@ -200,5 +207,33 @@ public class Snake {
     	
     	
     }//get
+    
+    public static void getBodyAndHead(JsonNode js) {
+    	
+    	if(js.isArray()) {
+    		
+    		if(js.size() == 1) {
+    			
+    			HEAD_LOCATION.x = js.get(0).get("x").intValue();
+    			HEAD_LOCATION.y = js.get(0).get("y").intValue();
+    			
+    		}else {
+    			
+    			for(int i = 0; i < js.size(); i++) {
+    			
+    				JsonNode arrayObject = js.get(i);
+    				JsonNode x = arrayObject.get("x");
+    				JsonNode y = arrayObject.get("y");
+    				FOOD_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
+    				
+    				LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
+    			
+    			}//for
+    		
+    		}//if
+    		
+    	}//if
+    	
+    }//getBodyAndHead
 
 }
