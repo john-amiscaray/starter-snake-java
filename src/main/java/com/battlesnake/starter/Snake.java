@@ -118,7 +118,7 @@ public class Snake {
             LOG.info("START");
 
             Map<String, String> response = new HashMap<>();
-            response.put("color", "#800000");
+            response.put("color", "#00FF00");
             response.put("headType", "pixel");
             response.put("tailType", "bolt");
             return response;
@@ -135,13 +135,16 @@ public class Snake {
          * @return a response back to the engine containing Battlesnake movement values.
          */
         public Map<String, String> move(JsonNode moveRequest) {
+        	
+        	JsonNode js = moveRequest.at("/board/food");
+        	
             try {
-                LOG.info("Data: {}", JSON_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(moveRequest));
+                LOG.info("FOOD COORDS: {} ----------", JSON_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(js));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            JsonNode js = moveRequest.at("/board/food");
-            findNearestFood(js);
+            
+            //findNearestFood(js);
             String[] possibleMoves = { "up", "down", "left", "right" };
 
              //Choose a random direction to move in
