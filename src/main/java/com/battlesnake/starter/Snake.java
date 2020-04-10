@@ -242,7 +242,6 @@ public class Snake {
     		return 1;
     	}
     	
-    	LOG.info("DEFAULT MOVE USED!");
     	return findPossibleMove();
     	
     }//getAppropriateMovement
@@ -277,22 +276,22 @@ public class Snake {
     	
     	if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x + 1, HEAD_LOCATION.y)))) {
     		
-    		if(!(HEAD_LOCATION.x > width))
+    		if(!(HEAD_LOCATION.x + 1 >= width))
     			return 3;
     		
     	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x - 1, HEAD_LOCATION.y)))) {
     		
-    		if(!(HEAD_LOCATION.x < 0))
+    		if(!(HEAD_LOCATION.x - 1 < 0))
     			return 2;
     		
     	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x , HEAD_LOCATION.y - 1)))) {
     		
-    		if(!(HEAD_LOCATION.y < 0))
+    		if(!(HEAD_LOCATION.y - 1 < 0))
     			return 0;
     		
     	}else if (!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x, HEAD_LOCATION.y + 1)))) {
     		
-    		if(!(HEAD_LOCATION.y > height))
+    		if(!(HEAD_LOCATION.y + 1 >= height))
     			return 1;
     		
     	}//if
