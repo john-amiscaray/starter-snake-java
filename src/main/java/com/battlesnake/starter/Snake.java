@@ -172,6 +172,7 @@ public class Snake {
         			mapDirection();
         		
         		move = POSSIBLE_MOVES[Character.getNumericValue(nearestFoodMap.charAt(currentMapStep))];
+        		updateHeadLocation(Character.getNumericValue(nearestFoodMap.charAt(currentMapStep)));
         		updateCurrentMapStep();
         		
         	}
@@ -181,7 +182,7 @@ public class Snake {
             return response;
         }
 
-        /**
+		/**
          * This method is called when a game your Battlesnake was in ends.
          * 
          * It is purely for informational purposes, you don't have to make any decisions
@@ -365,5 +366,22 @@ public class Snake {
     	}//if
     	
     }//updateCurrentMapStep
+    
+    private static void updateHeadLocation(int move) {
+    	
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+		if(move == 0)
+			HEAD_LOCATION.y++;
+		else if(move == 1)
+			HEAD_LOCATION.y--;
+		else if(move == 2)	
+			HEAD_LOCATION.x--;
+		else if(move == 3)
+			HEAD_LOCATION.x++;
+		
+    	
+    	
+	}//updateHeadLocation
+
 
 }//ENDOFCLASS
