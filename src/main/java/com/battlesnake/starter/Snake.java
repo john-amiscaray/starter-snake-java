@@ -100,6 +100,7 @@ public class Snake {
                 LOG.warn("Something went wrong!", e);
                 LOG.info("@@@@@@@" + nearestFoodMap + "@@@@@@@");
                 LOG.info("@@@@@@@ {} , {} @@@@@@@ {} ", NEAREST_FOOD_DIS.x, NEAREST_FOOD_DIS.y, foodTargeted);
+                LOG.info("HEAD IS AT: {} , {}  ", HEAD_LOCATION.x, HEAD_LOCATION.y);
                 return null;
             }
         }
