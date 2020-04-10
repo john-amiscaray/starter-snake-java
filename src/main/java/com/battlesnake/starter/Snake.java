@@ -192,7 +192,7 @@ public class Snake {
     			JsonNode y = arrayObject.get("y");
     			BODY_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
 
-    			//LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
+    			LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
     			
     		}//for
     		
@@ -241,6 +241,8 @@ public class Snake {
     		LOG.info("-----GOING DOWN-----");
     		return 1;
     	}
+    	
+    	LOG.info("DEFAULT MOVE USED!");
     	return 0;
     	
     }//getAppropriateMovement
