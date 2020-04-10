@@ -79,7 +79,6 @@ public class Snake {
             try {
                 JsonNode parsedRequest = JSON_MAPPER.readTree(req.body());
                 String uri = req.uri();
-                LOG.info("{} called with: {}", uri, req.body());
                 Map<String, String> snakeResponse;
                 if (uri.equals("/start")) {
                     snakeResponse = start(parsedRequest);
@@ -123,7 +122,6 @@ public class Snake {
          *         values.
          */
         public Map<String, String> start(JsonNode startRequest) {
-            LOG.info("START");
 
             Map<String, String> response = new HashMap<>();
             response.put("color", "#00FF00");
@@ -144,8 +142,8 @@ public class Snake {
          */
         public Map<String, String> move(JsonNode moveRequest) {
         	
-        	JsonNode turn = moveRequest.get("turn");
-        	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
+        	//JsonNode turn = moveRequest.get("turn");
+        	//LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
         	JsonNode foodArray = moveRequest.at("/board/food");
         	width = moveRequest.at("/board/width").intValue();
         	height = moveRequest.at("/board/height").intValue();
@@ -175,7 +173,7 @@ public class Snake {
          */
         public Map<String, String> end(JsonNode endRequest) {
 
-            LOG.info("END");
+            //LOG.info("END");
             return EMPTY;
         }
     }
@@ -242,8 +240,8 @@ public class Snake {
     
     public static int getAppropriateMovement() {
     	
-    	LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
-    			findNearestFood().x, findNearestFood().y);
+    	//LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
+    			//findNearestFood().x, findNearestFood().y);
     	int x = HEAD_LOCATION.x;
     	int y = HEAD_LOCATION.y;
     	
@@ -251,19 +249,19 @@ public class Snake {
     	
     	if(findNearestFood().x < HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x - 1, y)))) {
     		HEAD_LOCATION.x--;
-    		LOG.info("-----GOING LEFT-----");
+    		//LOG.info("-----GOING LEFT-----");
     		return 2;
     	}else if(findNearestFood().x > HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x + 1, y)))) {
     		HEAD_LOCATION.x++;
-    		LOG.info("-----GOING RIGHT-----");
+    		//LOG.info("-----GOING RIGHT-----");
     		return 3;
     	}else if(findNearestFood().y < HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x , y - 1)))) {
     		HEAD_LOCATION.y--;
-    		LOG.info("-----GOING UP-----");
+    		//LOG.info("-----GOING UP-----");
     		return 0;
     	}else if(findNearestFood().y > HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x, y + 1)))) {
     		HEAD_LOCATION.y++;
-    		LOG.info("-----GOING DOWN-----");
+    		//LOG.info("-----GOING DOWN-----");
     		return 1;
     	}
     	return 0;
