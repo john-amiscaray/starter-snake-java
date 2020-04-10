@@ -230,8 +230,7 @@ public class Snake {
     	FOOD_DIS.clear();
     	for(int i = 0; i < FOOD_LOCATIONS.size(); i++) {
     		
-    		FOOD_DIS.add((int) Point.distance(HEAD_LOCATION.getX(), HEAD_LOCATION.getY(), 
-    				FOOD_LOCATIONS.get(i).getX() , FOOD_LOCATIONS.get(i).getX() ));
+    		FOOD_DIS.add(getDistance(HEAD_LOCATION, FOOD_LOCATIONS.get(i)));
     		
     	}//for
     	
@@ -285,5 +284,14 @@ public class Snake {
     	return false;
     	
     }//bodyPartExistsOnThisPoint
+    
+    public static int getDistance(Point start, Point end) {
+    	
+    	int xDistance = Math.abs(start.x - end.x);
+    	int yDistance = Math.abs(start.y - end.y);
+    	
+    	return xDistance + yDistance;
+    	
+    }//getDistance
 
 }//ENDOFCLASS
