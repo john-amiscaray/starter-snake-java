@@ -244,18 +244,22 @@ public class Snake {
     	
     	if(nearest.x < HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x - 1, y)))) {
     		HEAD_LOCATION.x--;
+    		NEAREST_FOOD_DIS.x--;
     		//LOG.info("-----GOING LEFT-----");
     		return 2;
     	}else if(nearest.x > HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x + 1, y)))) {
     		HEAD_LOCATION.x++;
+    		NEAREST_FOOD_DIS.x++;
     		//LOG.info("-----GOING RIGHT-----");
     		return 3;
     	}else if(nearest.y < HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x , y - 1)))) {
     		HEAD_LOCATION.y--;
+    		NEAREST_FOOD_DIS.y--;
     		//LOG.info("-----GOING UP-----");
     		return 0;
     	}else if(nearest.y > HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x, y + 1)))) {
     		HEAD_LOCATION.y++;
+    		NEAREST_FOOD_DIS.y++;
     		//LOG.info("-----GOING DOWN-----");
     		return 1;
     	}
