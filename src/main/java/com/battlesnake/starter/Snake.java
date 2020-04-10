@@ -205,7 +205,8 @@ public class Snake {
     }//findAllFood
     
     public static void getBodyAndHead(JsonNode js) {
-    	
+    		
+    		BODY_LOCATIONS.clear();
     		HEAD_LOCATION.x = js.get(0).get("x").intValue();
     		HEAD_LOCATION.y = js.get(0).get("y").intValue();
     			
