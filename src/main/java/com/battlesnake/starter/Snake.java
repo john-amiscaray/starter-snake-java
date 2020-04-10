@@ -154,7 +154,7 @@ public class Snake {
             String[] possibleMoves = { "up", "down", "left", "right" };
 
              //Choose a direction to move to
-            String move = possibleMoves[0];
+            String move = possibleMoves[getAppropriateMovement()];
 
             Map<String, String> response = new HashMap<>();
             response.put("move", move);
