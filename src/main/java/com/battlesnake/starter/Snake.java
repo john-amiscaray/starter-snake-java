@@ -144,6 +144,8 @@ public class Snake {
          */
         public Map<String, String> move(JsonNode moveRequest) {
         	
+        	JsonNode turn = moveRequest.get("turn");
+        	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
         	JsonNode foodArray = moveRequest.at("/board/food");
         	width = moveRequest.at("/board/width").intValue();
         	height = moveRequest.at("/board/height").intValue();
