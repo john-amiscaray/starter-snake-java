@@ -30,12 +30,10 @@ public class Snake {
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     private static final Handler HANDLER = new Handler();
     private static final Logger LOG = LoggerFactory.getLogger(Snake.class);
-    private static ArrayList<Point> FOOD_LOCATIONS = new ArrayList<Point>();
     private static ArrayList<Integer> FOOD_DIS = new ArrayList<Integer>();
     private static int width, height;
     private static final Point HEAD_LOCATION = new Point();
     private static final ArrayList<Point> BODY_LOCATIONS = new ArrayList<Point>();
-    private static final Point NEAREST_FOOD = new Point();
 
     /**
      * Main entry point.
@@ -147,16 +145,17 @@ public class Snake {
         	JsonNode turn = moveRequest.get("turn");
         	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
         	JsonNode foodArray = moveRequest.at("/board/food");
-        	width = moveRequest.at("/board/width").intValue();
-        	height = moveRequest.at("/board/height").intValue();
+        	if(turn.intValue() == 0) {
+        		width = moveRequest.at("/board/width").intValue();
+            	height = moveRequest.at("/board/height").intValue();
+        	}//if
         	getBodyAndHead(moveRequest.at("/you/body"));
-            findAllFood(foodArray);
-            findNearestFood();
+            Point nearest = findNearestFood(foodArray);
             
             String[] possibleMoves = { "up", "down", "left", "right" };
 
              //Choose a direction to move to
-            String move = possibleMoves[getAppropriateMovement()];
+            String move = possibleMoves[getAppropriateMovement(nearest)];
 
             Map<String, String> response = new HashMap<>();
             response.put("move", move);
@@ -180,30 +179,6 @@ public class Snake {
         }
     }
     
-    public static void findAllFood(JsonNode js) {
-    	
-    	
-    	if(js.isArray()) {
-    		
-    		ArrayNode array = (ArrayNode) js;
-    		FOOD_LOCATIONS.clear();
-    		
-    		for(int i = 0; i < array.size(); i++) {
-    			
-    			JsonNode arrayObject = array.get(i);
-    			JsonNode x = arrayObject.get("x");
-    			JsonNode y = arrayObject.get("y");
-    			FOOD_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
-    			
-    			//LOG.info("EXEC #" + i + " Food Coord may be x:{} y: {}", x.intValue() ,y.intValue());
-    			
-    		}
-    		
-    	}//if
-    	
-    	
-    }//findAllFood
-    
     public static void getBodyAndHead(JsonNode js) {
     		
     		BODY_LOCATIONS.clear();
@@ -225,43 +200,43 @@ public class Snake {
     	
     }//getBodyAndHead
     
-    public static Point findNearestFood() {
+    public static Point findNearestFood(JsonNode js) {
     	
     	FOOD_DIS.clear();
-    	for(int i = 0; i < FOOD_LOCATIONS.size(); i++) {
+    	for(int i = 0; i < js.size(); i++) {
     		
-    		FOOD_DIS.add(getDistance(HEAD_LOCATION, FOOD_LOCATIONS.get(i)));
+    		FOOD_DIS.add(getDistance(HEAD_LOCATION, js.get(i).get("x").intValue(), js.get(i).get("y").intValue()));
     		
     	}//for
     	
     	int index = FOOD_DIS.indexOf(Collections.min(FOOD_DIS));
     	
-    	return FOOD_LOCATIONS.get(index);
+    	return new Point(js.get(index).get("x").intValue(), js.get(index).get("y").intValue());
     	
     }//findNearestFood
     
-    public static int getAppropriateMovement() {
+    public static int getAppropriateMovement(Point nearest) {
     	
     	LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
-    			findNearestFood().x, findNearestFood().y);
+    			nearest.x, nearest.y);
     	int x = HEAD_LOCATION.x;
     	int y = HEAD_LOCATION.y;
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	
-    	if(findNearestFood().x < HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x - 1, y)))) {
+    	if(nearest.x < HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x - 1, y)))) {
     		HEAD_LOCATION.x--;
     		LOG.info("-----GOING LEFT-----");
     		return 2;
-    	}else if(findNearestFood().x > HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x + 1, y)))) {
+    	}else if(nearest.x > HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x + 1, y)))) {
     		HEAD_LOCATION.x++;
     		LOG.info("-----GOING RIGHT-----");
     		return 3;
-    	}else if(findNearestFood().y < HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x , y - 1)))) {
+    	}else if(nearest.y < HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x , y - 1)))) {
     		HEAD_LOCATION.y--;
     		LOG.info("-----GOING UP-----");
     		return 0;
-    	}else if(findNearestFood().y > HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x, y + 1)))) {
+    	}else if(nearest.y > HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x, y + 1)))) {
     		HEAD_LOCATION.y++;
     		LOG.info("-----GOING DOWN-----");
     		return 1;
@@ -285,10 +260,10 @@ public class Snake {
     	
     }//bodyPartExistsOnThisPoint
     
-    public static int getDistance(Point start, Point end) {
+    public static int getDistance(Point start, int endX, int endY) {
     	
-    	int xDistance = Math.abs(start.x - end.x);
-    	int yDistance = Math.abs(start.y - end.y);
+    	int xDistance = Math.abs(start.x - endX);
+    	int yDistance = Math.abs(start.y - endY);
     	
     	return xDistance + yDistance;
     	
