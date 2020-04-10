@@ -244,22 +244,24 @@ public class Snake {
     	
     	LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
     			findNearestFood().x, findNearestFood().y);
+    	int x = HEAD_LOCATION.x;
+    	int y = HEAD_LOCATION.y;
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	
-    	if(findNearestFood().x < HEAD_LOCATION.x) {
+    	if(findNearestFood().x < HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x - 1, y)))) {
     		HEAD_LOCATION.x--;
     		LOG.info("-----GOING LEFT-----");
     		return 2;
-    	}else if(findNearestFood().x > HEAD_LOCATION.x) {
+    	}else if(findNearestFood().x > HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x + 1, y)))) {
     		HEAD_LOCATION.x++;
     		LOG.info("-----GOING RIGHT-----");
     		return 3;
-    	}else if(findNearestFood().y < HEAD_LOCATION.y) {
+    	}else if(findNearestFood().y < HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x , y - 1)))) {
     		HEAD_LOCATION.y--;
     		LOG.info("-----GOING UP-----");
     		return 0;
-    	}else if(findNearestFood().y > HEAD_LOCATION.y) {
+    	}else if(findNearestFood().y > HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x, y + 1)))) {
     		HEAD_LOCATION.y++;
     		LOG.info("-----GOING DOWN-----");
     		return 1;
@@ -267,5 +269,20 @@ public class Snake {
     	return 0;
     	
     }//getAppropriateMovement
+    
+    public static boolean bodyPartExistsOnThisPoint(Point p) {
+    	
+    	for(int i = 0; i < BODY_LOCATIONS.size(); i++) {
+    		
+    		Point p2 = BODY_LOCATIONS.get(i);
+    		if(p.getX() == p2.getX() && p.getY() == p2.getY()) {
+    			return true;
+    		}//if
+    		
+    	}//for
+    	
+    	return false;
+    	
+    }//bodyPartExistsOnThisPoint
 
 }//ENDOFCLASS
