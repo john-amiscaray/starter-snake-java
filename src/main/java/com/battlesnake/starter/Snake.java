@@ -35,7 +35,7 @@ public class Snake {
     private static int currentMapStep = 0;
     private static final Point HEAD_LOCATION = new Point();
     private static final String[] POSSIBLE_MOVES = { "up", "down", "left", "right" };
-    private static boolean foodTargeted;
+    private static boolean foodTargeted = false;
     private static final Point NEAREST_FOOD_DIS = new Point();
     private static final ArrayList<Point> BODY_LOCATIONS = new ArrayList<Point>();
 
