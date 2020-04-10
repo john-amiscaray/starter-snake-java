@@ -351,7 +351,7 @@ public class Snake {
     
     public static void updateCurrentMapStep() {
     	
-    	if(currentMapStep >= nearestFoodMap.length()) {
+    	if(currentMapStep >= nearestFoodMap.length() - 1) {
     		
     		currentMapStep = 0;
     		nearestFoodMap = null;
