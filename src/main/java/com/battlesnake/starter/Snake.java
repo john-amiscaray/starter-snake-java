@@ -99,7 +99,7 @@ public class Snake {
             } catch (Exception e) {
                 LOG.warn("Something went wrong!", e);
                 LOG.info("@@@@@@@" + nearestFoodMap + "@@@@@@@");
-                LOG.info("@@@@@@@ {} , {} @@@@@@@  ", NEAREST_FOOD_DIS.x, NEAREST_FOOD_DIS.y);
+                LOG.info("@@@@@@@ {} , {} @@@@@@@ {} ", NEAREST_FOOD_DIS.x, NEAREST_FOOD_DIS.y, foodTargeted);
                 return null;
             }
         }
