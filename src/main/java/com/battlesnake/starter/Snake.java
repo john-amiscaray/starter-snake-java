@@ -144,10 +144,10 @@ public class Snake {
          */
         public Map<String, String> move(JsonNode moveRequest) {
         	
-            JsonNode foodArray = moveRequest.at("/board/food");
-            width = moveRequest.at("/board/width").intValue();
-            height = moveRequest.at("/board/height").intValue();
-            getBodyAndHead(moveRequest.at("/you/body"));
+        	JsonNode foodArray = moveRequest.at("/board/food");
+        	width = moveRequest.at("/board/width").intValue();
+        	height = moveRequest.at("/board/height").intValue();
+        	getBodyAndHead(moveRequest.at("/you/body"));
             findAllFood(foodArray);
             findNearestFood();
             
@@ -210,6 +210,7 @@ public class Snake {
     			
     			HEAD_LOCATION.x = js.get(0).get("x").intValue();
     			HEAD_LOCATION.y = js.get(0).get("y").intValue();
+    			LOG.info("HEAD LOCATION INITIALIZED AT {} , {}", js.get(0).get("x").intValue(), js.get(0).get("y").intValue());
     			
     		}else {
     			
