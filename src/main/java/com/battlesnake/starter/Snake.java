@@ -351,6 +351,7 @@ public class Snake {
     		
     		currentMapStep = 0;
     		nearestFoodMap = null;
+    		foodTargeted = false;
     		
     	}else {
     		
