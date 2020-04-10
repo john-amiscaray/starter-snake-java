@@ -98,6 +98,7 @@ public class Snake {
                 return snakeResponse;
             } catch (Exception e) {
                 LOG.warn("Something went wrong!", e);
+                LOG.info("@@@@@@@" + nearestFoodMap + "@@@@@@@");
                 return null;
             }
         }
