@@ -243,7 +243,7 @@ public class Snake {
     	}
     	
     	LOG.info("DEFAULT MOVE USED!");
-    	return 0;
+    	return findPossibleMove();
     	
     }//getAppropriateMovement
     
@@ -270,5 +270,35 @@ public class Snake {
     	return xDistance + yDistance;
     	
     }//getDistance
+    
+    public static int findPossibleMove() {
+    	
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+    	
+    	if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x + 1, HEAD_LOCATION.y)))) {
+    		
+    		if(!(HEAD_LOCATION.x > width))
+    			return 3;
+    		
+    	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x - 1, HEAD_LOCATION.y)))) {
+    		
+    		if(!(HEAD_LOCATION.x < 0))
+    			return 2;
+    		
+    	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x , HEAD_LOCATION.y - 1)))) {
+    		
+    		if(!(HEAD_LOCATION.y < 0))
+    			return 0;
+    		
+    	}else if (!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x, HEAD_LOCATION.y + 1)))) {
+    		
+    		if(!(HEAD_LOCATION.y > height))
+    			return 1;
+    		
+    	}//if
+    	
+    	return 0;
+    	
+    }//findPossibleMove
 
 }//ENDOFCLASS
