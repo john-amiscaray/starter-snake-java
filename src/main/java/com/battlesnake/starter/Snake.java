@@ -32,7 +32,12 @@ public class Snake {
     private static final Logger LOG = LoggerFactory.getLogger(Snake.class);
     private static ArrayList<Integer> FOOD_DIS = new ArrayList<Integer>();
     private static int width, height;
+    private static String nearestFoodMap;
+    private static int currentMapStep = 0;
     private static final Point HEAD_LOCATION = new Point();
+    private static final String[] POSSIBLE_MOVES = { "up", "down", "left", "right" };
+    private static boolean foodTargeted;
+    private static final Point NEAREST_FOOD_DIS = new Point();
     private static final ArrayList<Point> BODY_LOCATIONS = new ArrayList<Point>();
 
     /**
@@ -77,7 +82,7 @@ public class Snake {
             try {
                 JsonNode parsedRequest = JSON_MAPPER.readTree(req.body());
                 String uri = req.uri();
-                LOG.info("{} called with: {}", uri, req.body());
+                //LOG.info("{} called with: {}", uri, req.body());
                 Map<String, String> snakeResponse;
                 if (uri.equals("/start")) {
                     snakeResponse = start(parsedRequest);
@@ -121,7 +126,7 @@ public class Snake {
          *         values.
          */
         public Map<String, String> start(JsonNode startRequest) {
-            LOG.info("START");
+            //LOG.info("START");
 
             Map<String, String> response = new HashMap<>();
             response.put("color", "#00FF00");
@@ -142,21 +147,34 @@ public class Snake {
          */
         public Map<String, String> move(JsonNode moveRequest) {
         	
+        	String move;
         	JsonNode turn = moveRequest.get("turn");
-        	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
+        	//LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
         	JsonNode foodArray = moveRequest.at("/board/food");
         	if(turn.intValue() == 0) {
         		width = moveRequest.at("/board/width").intValue();
             	height = moveRequest.at("/board/height").intValue();
         	}//if
         	getBodyAndHead(moveRequest.at("/you/body"));
-            Point nearest = findNearestFood(foodArray);
-            
-            String[] possibleMoves = { "up", "down", "left", "right" };
-
-             //Choose a direction to move to
-            String move = possibleMoves[getAppropriateMovement(nearest)];
-
+        	
+        	if(!foodTargeted) {
+        		
+        		 Point nearest = findNearestFood(foodArray);
+                 NEAREST_FOOD_DIS.x = HEAD_LOCATION.x - nearest.x;
+                 NEAREST_FOOD_DIS.y = HEAD_LOCATION.y - nearest.y;
+                 move = POSSIBLE_MOVES[getAppropriateMovement(nearest)];
+                 foodTargeted = true;
+                 
+        	}else {
+        		
+        		if(nearestFoodMap == null)
+        			mapDirection();
+        		
+        		move = POSSIBLE_MOVES[Character.getNumericValue(nearestFoodMap.charAt(currentMapStep))];
+        		updateCurrentMapStep();
+        		
+        	}
+           
             Map<String, String> response = new HashMap<>();
             response.put("move", move);
             return response;
@@ -217,8 +235,8 @@ public class Snake {
     
     public static int getAppropriateMovement(Point nearest) {
     	
-    	LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
-    			nearest.x, nearest.y);
+    	//LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
+    	//		nearest.x, nearest.y);
     	int x = HEAD_LOCATION.x;
     	int y = HEAD_LOCATION.y;
     	
@@ -226,19 +244,19 @@ public class Snake {
     	
     	if(nearest.x < HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x - 1, y)))) {
     		HEAD_LOCATION.x--;
-    		LOG.info("-----GOING LEFT-----");
+    		//LOG.info("-----GOING LEFT-----");
     		return 2;
     	}else if(nearest.x > HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x + 1, y)))) {
     		HEAD_LOCATION.x++;
-    		LOG.info("-----GOING RIGHT-----");
+    		//LOG.info("-----GOING RIGHT-----");
     		return 3;
     	}else if(nearest.y < HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x , y - 1)))) {
     		HEAD_LOCATION.y--;
-    		LOG.info("-----GOING UP-----");
+    		//LOG.info("-----GOING UP-----");
     		return 0;
     	}else if(nearest.y > HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x, y + 1)))) {
     		HEAD_LOCATION.y++;
-    		LOG.info("-----GOING DOWN-----");
+    		//LOG.info("-----GOING DOWN-----");
     		return 1;
     	}
     	
@@ -299,5 +317,47 @@ public class Snake {
     	return 0;
     	
     }//findPossibleMove
+    
+    public static void mapDirection() {
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+    	char xMove= ' ', yMove = ' ';
+    	nearestFoodMap = "";
+    	
+    	if(NEAREST_FOOD_DIS.x < 0) 
+    		xMove = '3';
+    	else
+    		xMove = '2';
+    	
+    	if(NEAREST_FOOD_DIS.y < 0) 
+    		yMove = '1';
+    	else
+    		yMove = '0';
+    	
+    	
+    	for(int x = 0; x < Math.abs(NEAREST_FOOD_DIS.x); x++) 
+    		nearestFoodMap += xMove;
+    		
+    	
+    	
+    	for(int y = 0; y < Math.abs(NEAREST_FOOD_DIS.y); y++)
+    		nearestFoodMap += yMove;
+    		
+    	
+    }//mapDirection
+    
+    public static void updateCurrentMapStep() {
+    	
+    	if(currentMapStep >= nearestFoodMap.length()) {
+    		
+    		currentMapStep = 0;
+    		nearestFoodMap = null;
+    		
+    	}else {
+    		
+    		currentMapStep++;
+    		
+    	}//if
+    	
+    }//updateCurrentMapStep
 
 }//ENDOFCLASS
