@@ -192,7 +192,7 @@ public class Snake {
     			JsonNode y = arrayObject.get("y");
     			BODY_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
 
-    			LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
+    			//LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
     			
     		}//for
     		
@@ -252,7 +252,7 @@ public class Snake {
     	for(int i = 0; i < BODY_LOCATIONS.size(); i++) {
     		
     		Point p2 = BODY_LOCATIONS.get(i);
-    		if(p.getX() == p2.getX() && p.getY() == p2.getY()) {
+    		if(p.x == p2.x && p.y == p2.y) {
     			return true;
     		}//if
     		
