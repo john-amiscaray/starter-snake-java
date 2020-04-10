@@ -322,7 +322,7 @@ public class Snake {
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	char xMove= ' ', yMove = ' ';
     	nearestFoodMap = "";
-    	
+    	LOG.info("@@@@@@@ {} , {} @@@@@@@  ", NEAREST_FOOD_DIS.x, NEAREST_FOOD_DIS.y);
     	if(NEAREST_FOOD_DIS.x < 0) 
     		xMove = '3';
     	else
