@@ -204,30 +204,21 @@ public class Snake {
     
     public static void getBodyAndHead(JsonNode js) {
     	
-    	if(js.isArray()) {
-    		BODY_LOCATIONS.clear();
-    		if(js.size() == 1) {
+    		HEAD_LOCATION.x = js.get(0).get("x").intValue();
+    		HEAD_LOCATION.y = js.get(0).get("y").intValue();
     			
-    			HEAD_LOCATION.x = js.get(0).get("x").intValue();
-    			HEAD_LOCATION.y = js.get(0).get("y").intValue();
-    			LOG.info("HEAD LOCATION INITIALIZED AT {} , {}", js.get(0).get("x").intValue(), js.get(0).get("y").intValue());
+    		for(int i = 0; i < js.size(); i++) {
     			
-    		}else {
-    			
-    			for(int i = 0; i < js.size(); i++) {
-    			
-    				JsonNode arrayObject = js.get(i);
-    				JsonNode x = arrayObject.get("x");
-    				JsonNode y = arrayObject.get("y");
-    				BODY_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
+    			JsonNode arrayObject = js.get(i);
+    			JsonNode x = arrayObject.get("x");
+    			JsonNode y = arrayObject.get("y");
+    			BODY_LOCATIONS.add(new Point(x.intValue(),y.intValue()));
 
-    				LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
+    			LOG.info("EXEC #" + i + " Body Coord may be x:{} y: {}", x.intValue() ,y.intValue());
     			
-    			}//for
+    		}//for
     		
-    		}//if
     		
-    	}//if
     	
     }//getBodyAndHead
     
