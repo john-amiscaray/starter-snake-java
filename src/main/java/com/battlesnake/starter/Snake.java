@@ -162,6 +162,7 @@ public class Snake {
         	if(!foodTargeted) {
         		
         		 Point nearest = findNearestFood(foodArray);
+        		 LOG.info("NEAREST FOOD LOCATED: {} , {} ", nearest.x, nearest.y);
                  NEAREST_FOOD_DIS.x = HEAD_LOCATION.x - nearest.x;
                  NEAREST_FOOD_DIS.y = HEAD_LOCATION.y - nearest.y;
                  move = POSSIBLE_MOVES[getAppropriateMovement(nearest)];
