@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import spark.Request;
 import spark.Response;
@@ -32,7 +31,7 @@ public class Snake {
     private static final Logger LOG = LoggerFactory.getLogger(Snake.class);
     private static ArrayList<Integer> FOOD_DIS = new ArrayList<Integer>();
     private static int width, height;
-    private static String nearestFoodMap;
+    private static String nearestFoodMap = null;
     private static int currentMapStep = 0;
     private static final Point HEAD_LOCATION = new Point();
     private static final String[] POSSIBLE_MOVES = { "up", "down", "left", "right" };
