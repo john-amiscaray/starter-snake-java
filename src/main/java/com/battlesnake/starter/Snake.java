@@ -99,6 +99,7 @@ public class Snake {
             } catch (Exception e) {
                 LOG.warn("Something went wrong!", e);
                 LOG.info("@@@@@@@" + nearestFoodMap + "@@@@@@@");
+                LOG.info("@@@@@@@ {} , {} @@@@@@@  ", NEAREST_FOOD_DIS.x, NEAREST_FOOD_DIS.y);
                 return null;
             }
         }
@@ -149,7 +150,7 @@ public class Snake {
         	
         	String move;
         	JsonNode turn = moveRequest.get("turn");
-        	//LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
+        	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@", turn.intValue());
         	JsonNode foodArray = moveRequest.at("/board/food");
         	if(turn.intValue() == 0) {
         		width = moveRequest.at("/board/width").intValue();
@@ -351,7 +352,7 @@ public class Snake {
     
     public static void updateCurrentMapStep() {
     	
-    	if(currentMapStep >= nearestFoodMap.length() - 1) {
+    	if(currentMapStep == nearestFoodMap.length() - 1) {
     		
     		currentMapStep = 0;
     		nearestFoodMap = null;
