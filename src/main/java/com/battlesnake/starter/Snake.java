@@ -314,6 +314,7 @@ public class Snake {
     		
     		if(!(HEAD_LOCATION.x + 1 >= width)) {
     			HEAD_LOCATION.x++;
+    			NEAREST_FOOD_DIS.x++;
     			return 3;
     		}//if
     		
@@ -321,18 +322,21 @@ public class Snake {
     		
     		if(!(HEAD_LOCATION.x - 1 < 0)) {
     			HEAD_LOCATION.x--;
+    			NEAREST_FOOD_DIS.x--;
     			return 2;
     		}
     	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x , HEAD_LOCATION.y - 1)))) {
     		
     		if(!(HEAD_LOCATION.y - 1 < 0)){
     			HEAD_LOCATION.y--;
+    			NEAREST_FOOD_DIS.y--;
     			return 0;
     		}
     	}else if (!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x, HEAD_LOCATION.y + 1)))) {
     		
     		if(!(HEAD_LOCATION.y + 1 >= height)) {
     			HEAD_LOCATION.y++;
+    			NEAREST_FOOD_DIS.y++;
     			return 1;
     		}
     	}//if
