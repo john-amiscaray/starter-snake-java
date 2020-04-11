@@ -155,6 +155,7 @@ public class Snake {
         		width = moveRequest.at("/board/width").intValue();
             	height = moveRequest.at("/board/height").intValue();
             	foodTargeted = false;
+            	currentMapStep = 0;
             	nearestFoodMap = null;
             	LOG.info("INIT");
         	}//if
@@ -163,6 +164,9 @@ public class Snake {
         	
         	
         	getBodyAndHead(moveRequest.at("/you/body"));
+        	
+        	if(NEAREST_FOOD_DIS.x == 0 && NEAREST_FOOD_DIS.y == 0)
+        		foodTargeted = false;
         	
         	if(foodTargeted == false) {
         		
@@ -308,24 +312,29 @@ public class Snake {
     	
     	if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x + 1, HEAD_LOCATION.y)))) {
     		
-    		if(!(HEAD_LOCATION.x + 1 >= width))
+    		if(!(HEAD_LOCATION.x + 1 >= width)) {
+    			HEAD_LOCATION.x++;
     			return 3;
+    		}//if
     		
     	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x - 1, HEAD_LOCATION.y)))) {
     		
-    		if(!(HEAD_LOCATION.x - 1 < 0))
+    		if(!(HEAD_LOCATION.x - 1 < 0)) {
+    			HEAD_LOCATION.x--;
     			return 2;
-    		
+    		}
     	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x , HEAD_LOCATION.y - 1)))) {
     		
-    		if(!(HEAD_LOCATION.y - 1 < 0))
+    		if(!(HEAD_LOCATION.y - 1 < 0)){
+    			HEAD_LOCATION.y--;
     			return 0;
-    		
+    		}
     	}else if (!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x, HEAD_LOCATION.y + 1)))) {
     		
-    		if(!(HEAD_LOCATION.y + 1 >= height))
+    		if(!(HEAD_LOCATION.y + 1 >= height)) {
+    			HEAD_LOCATION.y++;
     			return 1;
-    		
+    		}
     	}//if
     	
     	return 0;
