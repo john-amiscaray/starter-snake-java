@@ -151,15 +151,17 @@ public class Snake {
         	
         	String move;
         	JsonNode turn = moveRequest.get("turn");
-        	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@ , {} ", turn.intValue(), foodTargeted);
-        	JsonNode foodArray = moveRequest.at("/board/food");
-        	
         	if(turn.intValue() == 0) {
         		width = moveRequest.at("/board/width").intValue();
             	height = moveRequest.at("/board/height").intValue();
             	foodTargeted = false;
             	nearestFoodMap = null;
+            	LOG.info("INIT");
         	}//if
+        	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@ , {} ", turn.intValue(), foodTargeted);
+        	JsonNode foodArray = moveRequest.at("/board/food");
+        	
+        	
         	getBodyAndHead(moveRequest.at("/you/body"));
         	
         	if(foodTargeted == false) {
@@ -354,6 +356,7 @@ public class Snake {
     	for(int y = 0; y < Math.abs(NEAREST_FOOD_DIS.y); y++)
     		nearestFoodMap += yMove;
     		
+    	LOG.info(nearestFoodMap);
     	
     }//mapDirection
     
