@@ -157,6 +157,7 @@ public class Snake {
         	if(turn.intValue() == 0) {
         		width = moveRequest.at("/board/width").intValue();
             	height = moveRequest.at("/board/height").intValue();
+            	foodTargeted = false;
         	}//if
         	getBodyAndHead(moveRequest.at("/you/body"));
         	
