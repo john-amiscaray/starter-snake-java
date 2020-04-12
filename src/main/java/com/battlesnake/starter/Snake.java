@@ -30,7 +30,8 @@ public class Snake {
     private static final Handler HANDLER = new Handler();
     private static final Logger LOG = LoggerFactory.getLogger(Snake.class);
     private static ArrayList<Integer> FOOD_DIS = new ArrayList<Integer>();
-    private static int width, height;
+    private static int width;
+	private static int height;
     private static String nearestFoodMap = null;
     private static int currentMapStep = 0;
     private static final Point HEAD_LOCATION = new Point();
@@ -183,11 +184,23 @@ public class Snake {
         		if(nearestFoodMap == null)
         			mapDirection();
         		
-        		move = POSSIBLE_MOVES[Character.getNumericValue(nearestFoodMap.charAt(currentMapStep))];
-        		updateHeadLocation(Character.getNumericValue(nearestFoodMap.charAt(currentMapStep)));
-        		updateCurrentMapStep();
+        		int moveId = Character.getNumericValue(nearestFoodMap.charAt(currentMapStep));
         		
-        	}
+        		if(!(bodyPartExistsOnThisPoint(moveId))) {
+        			move = POSSIBLE_MOVES[moveId];
+            		updateHeadLocation(moveId);
+            		updateCurrentMapStep();
+        		}else {
+        			
+        			move = POSSIBLE_MOVES[findPossibleMove()];
+        			foodTargeted = false;
+        			currentMapStep = 0;
+            		nearestFoodMap = null;
+        			
+        		}//if
+        		
+        		
+        	}//if
            
             Map<String, String> response = new HashMap<>();
             response.put("move", move);
@@ -256,22 +269,22 @@ public class Snake {
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	
-    	if(nearest.x < HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x - 1, y)))) {
+    	if(nearest.x < x && !(bodyPartExistsOnThisPoint(2))) {
     		HEAD_LOCATION.x--;
     		NEAREST_FOOD_DIS.x--;
     		//LOG.info("-----GOING LEFT-----");
     		return 2;
-    	}else if(nearest.x > HEAD_LOCATION.x && !(bodyPartExistsOnThisPoint(new Point(x + 1, y)))) {
+    	}else if(nearest.x > x && !(bodyPartExistsOnThisPoint(3))) {
     		HEAD_LOCATION.x++;
     		NEAREST_FOOD_DIS.x++;
     		//LOG.info("-----GOING RIGHT-----");
     		return 3;
-    	}else if(nearest.y < HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x , y - 1)))) {
+    	}else if(nearest.y < y && !(bodyPartExistsOnThisPoint(0))) {
     		HEAD_LOCATION.y--;
     		NEAREST_FOOD_DIS.y--;
     		//LOG.info("-----GOING UP-----");
     		return 0;
-    	}else if(nearest.y > HEAD_LOCATION.y && !(bodyPartExistsOnThisPoint(new Point(x, y + 1)))) {
+    	}else if(nearest.y > y && !(bodyPartExistsOnThisPoint(1))) {
     		HEAD_LOCATION.y++;
     		NEAREST_FOOD_DIS.y++;
     		//LOG.info("-----GOING DOWN-----");
@@ -282,14 +295,26 @@ public class Snake {
     	
     }//getAppropriateMovement
     
-    public static boolean bodyPartExistsOnThisPoint(Point p) {
+    public static boolean bodyPartExistsOnThisPoint(int direc) {
     	
+//      String[] possibleMoves = { "up", "down", "left", "right" };
     	for(int i = 0; i < BODY_LOCATIONS.size(); i++) {
     		
-    		Point p2 = BODY_LOCATIONS.get(i);
-    		if(p.x == p2.x && p.y == p2.y) {
-    			return true;
-    		}//if
+    		Point currentPart = BODY_LOCATIONS.get(i);
+    		
+    		if(direc == 0) {
+    			if(currentPart.x == HEAD_LOCATION.x && currentPart.y == HEAD_LOCATION.y + 1)
+    				return true;
+    		}else if(direc == 1) {
+    			if(currentPart.x == HEAD_LOCATION.x && currentPart.y == HEAD_LOCATION.y - 1)
+    				return true;
+    		}else if(direc == 2) {
+    			if(currentPart.x == HEAD_LOCATION.x - 1 && currentPart.y == HEAD_LOCATION.y)
+    				return true;
+    		}else if(direc == 3) {
+    			if(currentPart.x == HEAD_LOCATION.x + 1 && currentPart.y == HEAD_LOCATION.y)
+    				return true;
+    		}
     		
     	}//for
     	
@@ -310,7 +335,7 @@ public class Snake {
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	
-    	if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x + 1, HEAD_LOCATION.y)))) {
+    	if(!(bodyPartExistsOnThisPoint(3))) {
     		
     		if(!(HEAD_LOCATION.x + 1 >= width)) {
     			HEAD_LOCATION.x++;
@@ -318,21 +343,21 @@ public class Snake {
     			return 3;
     		}//if
     		
-    	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x - 1, HEAD_LOCATION.y)))) {
+    	}else if(!(bodyPartExistsOnThisPoint(2))) {
     		
     		if(!(HEAD_LOCATION.x - 1 < 0)) {
     			HEAD_LOCATION.x--;
     			NEAREST_FOOD_DIS.x--;
     			return 2;
     		}
-    	}else if(!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x , HEAD_LOCATION.y - 1)))) {
+    	}else if(!(bodyPartExistsOnThisPoint(0))) {
     		
     		if(!(HEAD_LOCATION.y - 1 < 0)){
     			HEAD_LOCATION.y--;
     			NEAREST_FOOD_DIS.y--;
     			return 0;
     		}
-    	}else if (!(bodyPartExistsOnThisPoint(new Point(HEAD_LOCATION.x, HEAD_LOCATION.y + 1)))) {
+    	}else if (!(bodyPartExistsOnThisPoint(1))) {
     		
     		if(!(HEAD_LOCATION.y + 1 >= height)) {
     			HEAD_LOCATION.y++;
