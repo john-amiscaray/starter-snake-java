@@ -191,12 +191,11 @@ public class Snake {
             		updateHeadLocation(moveId);
             		updateCurrentMapStep();
         		}else {
-        			
+        			LOG.info("--emergency change of course---");
         			move = POSSIBLE_MOVES[findPossibleMove()];
         			foodTargeted = false;
         			currentMapStep = 0;
             		nearestFoodMap = null;
-        			
         		}//if
         		
         		
