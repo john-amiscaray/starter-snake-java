@@ -302,10 +302,10 @@ public class Snake {
     		Point currentPart = BODY_LOCATIONS.get(i);
     		
     		if(direc == 0) {
-    			if(currentPart.x == HEAD_LOCATION.x && currentPart.y == HEAD_LOCATION.y + 1)
+    			if(currentPart.x == HEAD_LOCATION.x && currentPart.y == HEAD_LOCATION.y - 1)
     				return true;
     		}else if(direc == 1) {
-    			if(currentPart.x == HEAD_LOCATION.x && currentPart.y == HEAD_LOCATION.y - 1)
+    			if(currentPart.x == HEAD_LOCATION.x && currentPart.y == HEAD_LOCATION.y + 1)
     				return true;
     		}else if(direc == 2) {
     			if(currentPart.x == HEAD_LOCATION.x - 1 && currentPart.y == HEAD_LOCATION.y)
