@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class Snake {
     private static int width;
 	private static int height;
     private static String nearestFoodMap = null;
-    private static Point[] snakeHeads;
+    private static LinkedList<JsonNode> criticalSnakes;
     private static Point nearestFoodLocation;
     private static int currentMapStep = 0;
     private static final Point HEAD_LOCATION = new Point();
@@ -158,6 +159,7 @@ public class Snake {
         		width = moveRequest.at("/board/width").intValue();
             	height = moveRequest.at("/board/height").intValue();
             	foodTargeted = false;
+            	criticalSnakes = new LinkedList<JsonNode>();
             	currentMapStep = 0;
             	nearestFoodMap = null;
             	LOG.info("INIT");
@@ -165,7 +167,7 @@ public class Snake {
         	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@ , {} ", turn.intValue(), foodTargeted);
         	JsonNode foodArray = moveRequest.at("/board/food");
         	
-        	
+        	searchForCriticalSnakes(moveRequest);
         	getBodyAndHead(moveRequest.at("/you/body"));
         	
         	if(NEAREST_FOOD_DIS.x == 0 && NEAREST_FOOD_DIS.y == 0)
@@ -181,6 +183,7 @@ public class Snake {
                  foodTargeted = true;
                  
         	}else {
+        		
         		if(nearestFoodMap == null)
         			mapDirection();
         		
@@ -320,6 +323,31 @@ public class Snake {
     		
     	}//for
     	
+    	for(int j = 0; j < criticalSnakes.size(); j++) {
+    		
+    		for(int k = 0; k < criticalSnakes.get(j).get("body").size(); k++) {
+    			
+    			JsonNode body = criticalSnakes.get(j).get("body");
+
+        		if(direc == 0) {
+        			if(body.get("x").intValue() == HEAD_LOCATION.x && body.get("y").intValue() == HEAD_LOCATION.y - 1)
+        				return true;
+        		}else if(direc == 1) {
+        			if(body.get("x").intValue()== HEAD_LOCATION.x && body.get("y").intValue() == HEAD_LOCATION.y + 1)
+        				return true;
+        		}else if(direc == 2) {
+        			if(body.get("x").intValue() == HEAD_LOCATION.x - 1 && body.get("y").intValue() == HEAD_LOCATION.y)
+        				return true;
+        		}else if(direc == 3) {
+        			if(body.get("x").intValue()== HEAD_LOCATION.x + 1 && body.get("y").intValue() == HEAD_LOCATION.y)
+        				return true;
+        		}//if
+    			
+    			
+    		}//for
+    		
+    	}//for
+    	
     	return false;
     	
     }//bodyPartExistsOnThisPoint
@@ -456,5 +484,25 @@ public class Snake {
     	return false;
     	
     }//foodAlreadyTaken
+    
+    private static void searchForCriticalSnakes(JsonNode js) {
+    	
+    	JsonNode snakes = js.at("/board/snakes");
+    	criticalSnakes.clear();
+    	
+    	for(int i = 0; i < snakes.size(); i++) {
+    		
+    		JsonNode body = js.get("body");
+    		if(getDistance(HEAD_LOCATION, body.get(0).get("x").intValue(), body.get(0).get("y").intValue()) <= 4
+    				&& getDistance(HEAD_LOCATION, body.get(body.size() - 1).get("x").intValue(),
+    						body.get(body.size() - 1).get("y").intValue()) <= 4) {
+    			
+    			criticalSnakes.add(body);
+    			
+    		}//if
+    		
+    	}//for
+    	
+    }//searchForCriticalSnakes
 
 }//ENDOFCLASS
