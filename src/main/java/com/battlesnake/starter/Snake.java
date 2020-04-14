@@ -192,9 +192,11 @@ public class Snake {
         		
         		if(!(bodyPartExistsOnThisPoint(moveId)) && !(foodAlreadyTaken(getSnakeHeads(moveRequest)))) {
         			
-        			move = POSSIBLE_MOVES[moveId];
-            		updateHeadLocation(moveId);
+        			moveId = accountForCompetingSnake(moveId, moveRequest);
+	        		move = POSSIBLE_MOVES[moveId];
+	        		updateHeadLocation(moveId);
             		updateCurrentMapStep();
+            		
         		}else {
         			
         			LOG.info("--emergency change of course---");
@@ -508,5 +510,88 @@ public class Snake {
     	}//for
     	
     }//searchForCriticalSnakes
+    
+    private static int accountForCompetingSnake(int moveId, JsonNode info) {
+    	
+    	Point contestedPoint = getDestinationPoint(moveId);
+    	for(JsonNode snake : criticalSnakes) {
+    		
+    		if(getDistance(new Point(snake.get("body").get(0).get("x").intValue(), snake.get("body").get(0).get("y").intValue())
+    				, contestedPoint.x, contestedPoint.y) == 1) {
+    			
+    			if(snake.get("body").size() > info.at("/you/body").size()) {
+    				
+    				if(moveId == 0) 
+    					return findPossibleMove(false, true, true, true);
+    				else if(moveId == 1)
+    					return findPossibleMove(true, false, true, true);
+    				else if(moveId == 2)
+    					return findPossibleMove(true, true, false, true);
+    				else if(moveId == 3)
+    					return findPossibleMove(true, true, true, false);
+    				
+    			}//if
+    			
+    		}//if
+    		
+    	}//for
+    	
+    	return Character.getNumericValue(nearestFoodMap.charAt(currentMapStep));
+    	
+    }//lookForCompetingSnake
+    
+    private static Point getDestinationPoint(int moveId) {
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+    	if(moveId == 0) 
+    		return new Point(HEAD_LOCATION.x, HEAD_LOCATION.y - 1);
+    	else if(moveId == 1)
+    		return new Point(HEAD_LOCATION.x, HEAD_LOCATION.y + 1);
+    	else if(moveId == 2)
+    		return new Point(HEAD_LOCATION.x - 1, HEAD_LOCATION.y);
+    	else if(moveId == 3)
+    		return new Point(HEAD_LOCATION.x + 1, HEAD_LOCATION.y);
+    	
+    	throw new IllegalArgumentException();
+    	
+    }//getDestinationPoint
+    
+    private static int findPossibleMove(boolean upAvailable, boolean downAvailable, boolean leftAvailable, boolean rightAvailable) {
+    	
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+    	
+    	if(!(bodyPartExistsOnThisPoint(3)) && rightAvailable) {
+    		
+    		if(!(HEAD_LOCATION.x + 1 >= width)) {
+    			HEAD_LOCATION.x++;
+    			NEAREST_FOOD_DIS.x++;
+    			return 3;
+    		}//if
+    		
+    	}else if(!(bodyPartExistsOnThisPoint(2)) && leftAvailable) {
+    		
+    		if(!(HEAD_LOCATION.x - 1 < 0)) {
+    			HEAD_LOCATION.x--;
+    			NEAREST_FOOD_DIS.x--;
+    			return 2;
+    		}
+    	}else if(!(bodyPartExistsOnThisPoint(0)) && upAvailable) {
+    		
+    		if(!(HEAD_LOCATION.y - 1 < 0)){
+    			HEAD_LOCATION.y--;
+    			NEAREST_FOOD_DIS.y--;
+    			return 0;
+    		}
+    	}else if (!(bodyPartExistsOnThisPoint(1)) && downAvailable) {
+    		
+    		if(!(HEAD_LOCATION.y + 1 >= height)) {
+    			HEAD_LOCATION.y++;
+    			NEAREST_FOOD_DIS.y++;
+    			return 1;
+    		}
+    	}//if
+    	
+    	return 0;
+    	
+    }//findPossibleMove
 
 }//ENDOFCLASS
