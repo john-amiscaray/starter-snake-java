@@ -492,7 +492,7 @@ public class Snake {
     	
     	for(int i = 0; i < snakes.size(); i++) {
     		
-    		JsonNode body = js.get("body");
+    		JsonNode body = snakes.get("body");
     		if(getDistance(HEAD_LOCATION, body.get(0).get("x").intValue(), body.get(0).get("y").intValue()) <= 4
     				&& getDistance(HEAD_LOCATION, body.get(body.size() - 1).get("x").intValue(),
     						body.get(body.size() - 1).get("y").intValue()) <= 4) {
