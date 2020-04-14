@@ -180,7 +180,7 @@ public class Snake {
         		 LOG.info("NEAREST FOOD LOCATED: {} , {} ", nearestFoodLocation.x, nearestFoodLocation.y);
                  NEAREST_FOOD_DIS.x = HEAD_LOCATION.x - nearestFoodLocation.x;
                  NEAREST_FOOD_DIS.y = HEAD_LOCATION.y - nearestFoodLocation.y;
-                 move = POSSIBLE_MOVES[getAppropriateMovement(nearestFoodLocation)];
+                 move = POSSIBLE_MOVES[getAppropriateMovement(nearestFoodLocation, moveRequest)];
                  foodTargeted = true;
                  
         	}else {
@@ -276,7 +276,7 @@ public class Snake {
     	
     }//findNearestFood
     
-    private static int getAppropriateMovement(Point nearest) {
+    private static int getAppropriateMovement(Point nearest, JsonNode js) {
     	
     	//LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
     	//		nearest.x, nearest.y);
@@ -289,22 +289,22 @@ public class Snake {
     		HEAD_LOCATION.x--;
     		NEAREST_FOOD_DIS.x--;
     		//LOG.info("-----GOING LEFT-----");
-    		return 2;
+    		return accountForCompetingSnake(2, js);
     	}else if(nearest.x > x && !(bodyPartExistsOnThisPoint(3))) {
     		HEAD_LOCATION.x++;
     		NEAREST_FOOD_DIS.x++;
     		//LOG.info("-----GOING RIGHT-----");
-    		return 3;
+    		return accountForCompetingSnake(3, js);
     	}else if(nearest.y < y && !(bodyPartExistsOnThisPoint(0))) {
     		HEAD_LOCATION.y--;
     		NEAREST_FOOD_DIS.y--;
     		//LOG.info("-----GOING UP-----");
-    		return 0;
+    		return accountForCompetingSnake(0, js);
     	}else if(nearest.y > y && !(bodyPartExistsOnThisPoint(1))) {
     		HEAD_LOCATION.y++;
     		NEAREST_FOOD_DIS.y++;
     		//LOG.info("-----GOING DOWN-----");
-    		return 1;
+    		return accountForCompetingSnake(1, js);
     	}
     	
     	return findPossibleMove();
