@@ -102,7 +102,7 @@ public class Snake {
                 return snakeResponse;
             } catch (Exception e) {
                 LOG.warn("Something went wrong!", e);
-                LOG.info(criticalSnakes.get(0).toString());
+                LOG.info(criticalSnakes.get(0).get("body").toString());
                 LOG.info("@@@@@@@" + nearestFoodMap + "@@@@@@@");
                 LOG.info("@@@@@@@ {} , {} @@@@@@@ {} ", NEAREST_FOOD_DIS.x, NEAREST_FOOD_DIS.y, foodTargeted);
                 LOG.info("HEAD IS AT: {} , {}  ", HEAD_LOCATION.x, HEAD_LOCATION.y);
