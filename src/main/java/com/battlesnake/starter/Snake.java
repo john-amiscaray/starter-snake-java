@@ -33,6 +33,8 @@ public class Snake {
     private static int width;
 	private static int height;
     private static String nearestFoodMap = null;
+    private static Point[] snakeHeads;
+    private static Point nearestFoodLocation;
     private static int currentMapStep = 0;
     private static final Point HEAD_LOCATION = new Point();
     private static final String[] POSSIBLE_MOVES = { "up", "down", "left", "right" };
@@ -171,31 +173,32 @@ public class Snake {
         	
         	if(foodTargeted == false) {
         		
-        		 Point nearest = findNearestFood(foodArray);
-        		 LOG.info("NEAREST FOOD LOCATED: {} , {} ", nearest.x, nearest.y);
-                 NEAREST_FOOD_DIS.x = HEAD_LOCATION.x - nearest.x;
-                 NEAREST_FOOD_DIS.y = HEAD_LOCATION.y - nearest.y;
-                 move = POSSIBLE_MOVES[getAppropriateMovement(nearest)];
-                 LOG.info("EXEC");
+        		 nearestFoodLocation = findNearestFood(foodArray);
+        		 LOG.info("NEAREST FOOD LOCATED: {} , {} ", nearestFoodLocation.x, nearestFoodLocation.y);
+                 NEAREST_FOOD_DIS.x = HEAD_LOCATION.x - nearestFoodLocation.x;
+                 NEAREST_FOOD_DIS.y = HEAD_LOCATION.y - nearestFoodLocation.y;
+                 move = POSSIBLE_MOVES[getAppropriateMovement(nearestFoodLocation)];
                  foodTargeted = true;
                  
         	}else {
-        		
         		if(nearestFoodMap == null)
         			mapDirection();
         		
         		int moveId = Character.getNumericValue(nearestFoodMap.charAt(currentMapStep));
         		
-        		if(!(bodyPartExistsOnThisPoint(moveId))) {
+        		if(!(bodyPartExistsOnThisPoint(moveId)) && !(foodAlreadyTaken(getSnakeHeads(moveRequest)))) {
+        			
         			move = POSSIBLE_MOVES[moveId];
             		updateHeadLocation(moveId);
             		updateCurrentMapStep();
         		}else {
+        			
         			LOG.info("--emergency change of course---");
         			move = POSSIBLE_MOVES[findPossibleMove()];
         			foodTargeted = false;
         			currentMapStep = 0;
             		nearestFoodMap = null;
+            		
         		}//if
         		
         		
@@ -223,7 +226,7 @@ public class Snake {
         }
     }
     
-    public static void getBodyAndHead(JsonNode js) {
+    private static void getBodyAndHead(JsonNode js) {
     		
     		BODY_LOCATIONS.clear();
     		HEAD_LOCATION.x = js.get(0).get("x").intValue();
@@ -244,7 +247,7 @@ public class Snake {
     	
     }//getBodyAndHead
     
-    public static Point findNearestFood(JsonNode js) {
+    private static Point findNearestFood(JsonNode js) {
     	
     	FOOD_DIS.clear();
     	for(int i = 0; i < js.size(); i++) {
@@ -259,7 +262,7 @@ public class Snake {
     	
     }//findNearestFood
     
-    public static int getAppropriateMovement(Point nearest) {
+    private static int getAppropriateMovement(Point nearest) {
     	
     	//LOG.info("-----HEAD_LOCATION IS {}, {} --- NEAREST FOOD IS {},{} -----", HEAD_LOCATION.x, HEAD_LOCATION.y,
     	//		nearest.x, nearest.y);
@@ -294,7 +297,7 @@ public class Snake {
     	
     }//getAppropriateMovement
     
-    public static boolean bodyPartExistsOnThisPoint(int direc) {
+    private static boolean bodyPartExistsOnThisPoint(int direc) {
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	for(int i = 0; i < BODY_LOCATIONS.size(); i++) {
@@ -321,7 +324,7 @@ public class Snake {
     	
     }//bodyPartExistsOnThisPoint
     
-    public static int getDistance(Point start, int endX, int endY) {
+    private static int getDistance(Point start, int endX, int endY) {
     	
     	int xDistance = Math.abs(start.x - endX);
     	int yDistance = Math.abs(start.y - endY);
@@ -330,7 +333,7 @@ public class Snake {
     	
     }//getDistance
     
-    public static int findPossibleMove() {
+    private static int findPossibleMove() {
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	
@@ -369,7 +372,7 @@ public class Snake {
     	
     }//findPossibleMove
     
-    public static void mapDirection() {
+    private static void mapDirection() {
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	char xMove= ' ', yMove = ' ';
     	nearestFoodMap = "";
@@ -397,7 +400,7 @@ public class Snake {
     	
     }//mapDirection
     
-    public static void updateCurrentMapStep() {
+    private static void updateCurrentMapStep() {
     	
     	if(currentMapStep == nearestFoodMap.length() - 1) {
     		
@@ -428,6 +431,30 @@ public class Snake {
     	
     	
 	}//updateHeadLocation
-
+    
+    private static Point[] getSnakeHeads(JsonNode js) {
+    	
+    	JsonNode snakes = js.at("/board/snakes");
+    	Point [] heads = new Point[snakes.size()];
+    	for(int i = 0; i < snakes.size(); i++)
+    		heads[i] = new Point (snakes.get(i).get(0).get("x").intValue() , snakes.get(i).get(0).get("y").intValue());
+    	
+    	return heads;
+    	
+    }//findSnakeHeads
+    
+    private static boolean foodAlreadyTaken(Point[] heads) {
+    	
+    	for(int i = 0; i < heads.length; i++) {
+    		
+    		if(getDistance(heads[i], nearestFoodLocation.x, nearestFoodLocation.y) == 0)
+    			return true;
+    			
+    		
+    	}//for
+    	
+    	return false;
+    	
+    }//foodAlreadyTaken
 
 }//ENDOFCLASS
