@@ -434,7 +434,7 @@ public class Snake {
     
     private static Point[] getSnakeHeads(JsonNode js) {
     	
-    	JsonNode snakes = js.at("/board/snakes");
+    	JsonNode snakes = js.at("/board/snakes/body");
     	Point [] heads = new Point[snakes.size()];
     	for(int i = 0; i < snakes.size(); i++)
     		heads[i] = new Point (snakes.get(i).get(0).get("x").intValue() , snakes.get(i).get(0).get("y").intValue());
