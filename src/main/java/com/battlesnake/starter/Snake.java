@@ -544,7 +544,7 @@ public class Snake {
     		
     	}//for
     	
-    	return Character.getNumericValue(nearestFoodMap.charAt(currentMapStep));
+    	return moveId;
     	
     }//lookForCompetingSnake
     
