@@ -332,16 +332,16 @@ public class Snake {
         			JsonNode body = criticalSnakes.get(j).get("body");
 
             		if(direc == 0) {
-            			if(body.get(k).get("x").intValue() == HEAD_LOCATION.x && body.get(k).get("y").intValue() == HEAD_LOCATION.y - 1)
+            			if(body.get(k).get("x").intValue() == HEAD_LOCATION.x || body.get(k).get("y").intValue() == HEAD_LOCATION.y - 1)
             				return true;
             		}else if(direc == 1) {
-            			if(body.get(k).get("x").intValue()== HEAD_LOCATION.x && body.get(k).get("y").intValue() == HEAD_LOCATION.y + 1)
+            			if(body.get(k).get("x").intValue()== HEAD_LOCATION.x || body.get(k).get("y").intValue() == HEAD_LOCATION.y + 1)
             				return true;
             		}else if(direc == 2) {
-            			if(body.get(k).get("x").intValue() == HEAD_LOCATION.x - 1 && body.get(k).get("y").intValue() == HEAD_LOCATION.y)
+            			if(body.get(k).get("x").intValue() == HEAD_LOCATION.x - 1 || body.get(k).get("y").intValue() == HEAD_LOCATION.y)
             				return true;
             		}else if(direc == 3) {
-            			if(body.get(k).get("x").intValue()== HEAD_LOCATION.x + 1 && body.get(k).get("y").intValue() == HEAD_LOCATION.y)
+            			if(body.get(k).get("x").intValue()== HEAD_LOCATION.x + 1 || body.get(k).get("y").intValue() == HEAD_LOCATION.y)
             				return true;
             		}//if
         			
