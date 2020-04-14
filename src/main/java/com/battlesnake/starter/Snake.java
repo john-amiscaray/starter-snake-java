@@ -192,10 +192,17 @@ public class Snake {
         		
         		if(!(bodyPartExistsOnThisPoint(moveId)) && !(foodAlreadyTaken(getSnakeHeads(moveRequest)))) {
         			
-        			moveId = accountForCompetingSnake(moveId, moveRequest);
-	        		move = POSSIBLE_MOVES[moveId];
+        			int checkedId = accountForCompetingSnake(moveId, moveRequest);
+        			if(checkedId != moveId) {
+        				moveId = checkedId;
+        				foodTargeted = false;
+        				nearestFoodMap = null;
+        				currentMapStep = 0;
+        			}else {
+        				updateCurrentMapStep();
+        			}
+        			move = POSSIBLE_MOVES[moveId];
 	        		updateHeadLocation(moveId);
-            		updateCurrentMapStep();
             		
         		}else {
         			
@@ -519,7 +526,7 @@ public class Snake {
     		if(getDistance(new Point(snake.get("body").get(0).get("x").intValue(), snake.get("body").get(0).get("y").intValue())
     				, contestedPoint.x, contestedPoint.y) == 1) {
     			
-    			if(snake.get("body").size() > info.at("/you/body").size()) {
+    			if(snake.get("body").size() >= info.at("/you/body").size()) {
     				
     				if(moveId == 0) 
     					return findPossibleMove(false, true, true, true);
