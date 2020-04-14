@@ -167,8 +167,8 @@ public class Snake {
         	LOG.info("@@@@@@@@@@@@@@@@@@@@ TURN #{} @@@@@@@@@@@@@@@@@@@@@ , {} ", turn.intValue(), foodTargeted);
         	JsonNode foodArray = moveRequest.at("/board/food");
         	
-        	searchForCriticalSnakes(moveRequest);
         	getBodyAndHead(moveRequest.at("/you/body"));
+        	searchForCriticalSnakes(moveRequest);
         	
         	if(NEAREST_FOOD_DIS.x == 0 && NEAREST_FOOD_DIS.y == 0)
         		foodTargeted = false;
