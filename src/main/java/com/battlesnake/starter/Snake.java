@@ -525,7 +525,7 @@ public class Snake {
     	for(JsonNode snake : criticalSnakes) {
     		
     		if(getDistance(new Point(snake.get("body").get(0).get("x").intValue(), snake.get("body").get(0).get("y").intValue())
-    				, contestedPoint.x, contestedPoint.y) == 1 && snake.get("name") != info.at("/you/name")) {
+    				, contestedPoint.x, contestedPoint.y) == 1 && !(snake.equals(info.get("you")))) {
     			
     			if(snake.get("body").size() >= info.at("/you/body").size()) {
     				
