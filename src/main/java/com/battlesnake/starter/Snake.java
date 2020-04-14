@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.tools.sjavac.Log;
 
 import spark.Request;
 import spark.Response;
@@ -198,6 +199,7 @@ public class Snake {
         				foodTargeted = false;
         				nearestFoodMap = null;
         				currentMapStep = 0;
+        				LOG.info("---EVADING COMPETING SNAKE---");
         			}else {
         				updateCurrentMapStep();
         			}
