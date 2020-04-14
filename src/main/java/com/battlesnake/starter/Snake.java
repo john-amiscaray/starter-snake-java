@@ -190,7 +190,8 @@ public class Snake {
         		
         		int moveId = Character.getNumericValue(nearestFoodMap.charAt(currentMapStep));
         		
-        		if(!(bodyPartExistsOnThisPoint(moveId)) && !(foodAlreadyTaken(getSnakeHeads(moveRequest)))) {
+        		if(!(bodyPartExistsOnThisPoint(moveId)) && !(foodAlreadyTaken(getSnakeHeads()))
+        				&& !(surrounded(moveId, moveRequest))) {
         			
         			int checkedId = accountForCompetingSnake(moveId, moveRequest);
         			if(checkedId != moveId) {
@@ -208,7 +209,7 @@ public class Snake {
         		}else {
         			
         			LOG.info("--emergency change of course---");
-        			move = POSSIBLE_MOVES[findPossibleMove()];
+        			move = POSSIBLE_MOVES[findPossibleMove(moveRequest)];
         			foodTargeted = false;
         			currentMapStep = 0;
             		nearestFoodMap = null;
@@ -285,29 +286,29 @@ public class Snake {
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	
-    	if(nearest.x < x && !(bodyPartExistsOnThisPoint(2))) {
+    	if(nearest.x < x && !(bodyPartExistsOnThisPoint(2)) && !surrounded(2, js)) {
     		HEAD_LOCATION.x--;
     		NEAREST_FOOD_DIS.x--;
     		//LOG.info("-----GOING LEFT-----");
     		return accountForCompetingSnake(2, js);
-    	}else if(nearest.x > x && !(bodyPartExistsOnThisPoint(3))) {
+    	}else if(nearest.x > x && !(bodyPartExistsOnThisPoint(3)) && !surrounded(3, js)) {
     		HEAD_LOCATION.x++;
     		NEAREST_FOOD_DIS.x++;
     		//LOG.info("-----GOING RIGHT-----");
     		return accountForCompetingSnake(3, js);
-    	}else if(nearest.y < y && !(bodyPartExistsOnThisPoint(0))) {
+    	}else if(nearest.y < y && !(bodyPartExistsOnThisPoint(0)) && !surrounded(0, js)) {
     		HEAD_LOCATION.y--;
     		NEAREST_FOOD_DIS.y--;
     		//LOG.info("-----GOING UP-----");
     		return accountForCompetingSnake(0, js);
-    	}else if(nearest.y > y && !(bodyPartExistsOnThisPoint(1))) {
+    	}else if(nearest.y > y && !(bodyPartExistsOnThisPoint(1)) && !surrounded(1, js)) {
     		HEAD_LOCATION.y++;
     		NEAREST_FOOD_DIS.y++;
     		//LOG.info("-----GOING DOWN-----");
     		return accountForCompetingSnake(1, js);
     	}
     	
-    	return findPossibleMove();
+    	return findPossibleMove(js);
     	
     }//getAppropriateMovement
     
@@ -375,40 +376,41 @@ public class Snake {
     	
     }//getDistance
     
-    private static int findPossibleMove() {
+    private static int findPossibleMove(JsonNode js) {
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
     	
-    	if(!(bodyPartExistsOnThisPoint(3))) {
+    	if(!(bodyPartExistsOnThisPoint(3)) && !(surrounded(3, js)) && !(HEAD_LOCATION.x + 1 >= width)) {
     		
-    		if(!(HEAD_LOCATION.x + 1 >= width)) {
-    			HEAD_LOCATION.x++;
-    			NEAREST_FOOD_DIS.x++;
-    			return 3;
-    		}//if
+    	
+    		HEAD_LOCATION.x++;
+    		NEAREST_FOOD_DIS.x++;
+    		return 3;
     		
-    	}else if(!(bodyPartExistsOnThisPoint(2))) {
     		
-    		if(!(HEAD_LOCATION.x - 1 < 0)) {
-    			HEAD_LOCATION.x--;
-    			NEAREST_FOOD_DIS.x--;
-    			return 2;
-    		}
-    	}else if(!(bodyPartExistsOnThisPoint(0))) {
+    	}else if(!(bodyPartExistsOnThisPoint(2)) && !(surrounded(2, js)) && !(HEAD_LOCATION.x - 1 < 0)) {
     		
-    		if(!(HEAD_LOCATION.y - 1 < 0)){
-    			HEAD_LOCATION.y--;
-    			NEAREST_FOOD_DIS.y--;
-    			return 0;
-    		}
-    	}else if (!(bodyPartExistsOnThisPoint(1))) {
+    		HEAD_LOCATION.x--;
+    		NEAREST_FOOD_DIS.x--;
+    		return 2;
+    	
+    	}else if(!(bodyPartExistsOnThisPoint(0)) && !(surrounded(0, js)) && !(HEAD_LOCATION.y - 1 < 0)) {
     		
-    		if(!(HEAD_LOCATION.y + 1 >= height)) {
-    			HEAD_LOCATION.y++;
-    			NEAREST_FOOD_DIS.y++;
-    			return 1;
-    		}
+    	
+    		HEAD_LOCATION.y--;
+    		NEAREST_FOOD_DIS.y--;
+    		return 0;
+    		
+    	}else if (!(bodyPartExistsOnThisPoint(1)) && !(surrounded(1, js)) && !(HEAD_LOCATION.y + 1 >= height)) {
+    		
+    		
+    		HEAD_LOCATION.y++;
+    		NEAREST_FOOD_DIS.y++;
+    		return 1;
+    		
     	}//if
+    	
+    	LOG.info("----I DON'T KNOW WHAT I'M DOING----");
     	
     	return 0;
     	
@@ -474,7 +476,7 @@ public class Snake {
     	
 	}//updateHeadLocation
     
-    private static Point[] getSnakeHeads(JsonNode js) {
+    private static Point[] getSnakeHeads() {
     	
     	Point [] heads = new Point[criticalSnakes.size()];
     	for(int i = 0; i < criticalSnakes.size(); i++)
@@ -563,6 +565,7 @@ public class Snake {
     	
     }//getDestinationPoint
     
+    
     private static int findPossibleMove(boolean upAvailable, boolean downAvailable, boolean leftAvailable, boolean rightAvailable) {
     	
 //      String[] possibleMoves = { "up", "down", "left", "right" };
@@ -601,5 +604,86 @@ public class Snake {
     	return 0;
     	
     }//findPossibleMove
+    
+    private static boolean surrounded(int direction, JsonNode info) {
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+    	Point squareOfInterest = getDestinationPoint(direction);
+    	
+    	if(!(bodyPartExistsOnThisPoint(0, squareOfInterest, info))) {
+    		
+    		return false;
+    		
+    	}else if(!(bodyPartExistsOnThisPoint(1, squareOfInterest,info))) {
+    		
+    		return false;
+    		
+    	}else if(!(bodyPartExistsOnThisPoint(2, squareOfInterest,info))) {
+    		
+    		return false;
+    		
+    	}else if(!(bodyPartExistsOnThisPoint(3, squareOfInterest,info))) {
+    		
+    		return false;
+    		
+    	}
+    	
+    	return true;
+    	
+    }//surrounded
+    
+ private static boolean bodyPartExistsOnThisPoint(int direc, Point squareOfInterest, JsonNode info) {
+    	
+//      String[] possibleMoves = { "up", "down", "left", "right" };
+    	for(int i = 0; i < BODY_LOCATIONS.size(); i++) {
+    		
+    		Point currentPart = BODY_LOCATIONS.get(i);
+    		
+    		if(direc == 0) {
+    			if(currentPart.x == squareOfInterest.x && currentPart.y == squareOfInterest.y - 1)
+    				return true;
+    		}else if(direc == 1) {
+    			if(currentPart.x == squareOfInterest.x && currentPart.y == squareOfInterest.y + 1)
+    				return true;
+    		}else if(direc == 2) {
+    			if(currentPart.x == squareOfInterest.x - 1 && currentPart.y == squareOfInterest.y)
+    				return true;
+    		}else if(direc == 3) {
+    			if(currentPart.x == squareOfInterest.x + 1 && currentPart.y == squareOfInterest.y)
+    				return true;
+    		}
+    		
+    	}//for
+    	
+    	for(int j = 0; j < criticalSnakes.size(); j++) {
+    		
+    		if(criticalSnakes.get(j) != null && !(criticalSnakes.get(j).equals(info.get("you")))) {
+    			for(int k = 0; k < criticalSnakes.get(j).get("body").size(); k++) {
+        			
+        			JsonNode body = criticalSnakes.get(j).get("body");
+
+            		if(direc == 0) {
+            			if(body.get(k).get("x").intValue() == squareOfInterest.x && body.get(k).get("y").intValue() == squareOfInterest.y - 1)
+            				return true;
+            		}else if(direc == 1) {
+            			if(body.get(k).get("x").intValue()== squareOfInterest.x && body.get(k).get("y").intValue() == squareOfInterest.y + 1)
+            				return true;
+            		}else if(direc == 2) {
+            			if(body.get(k).get("x").intValue() == squareOfInterest.x - 1 && body.get(k).get("y").intValue() == squareOfInterest.y)
+            				return true;
+            		}else if(direc == 3) {
+            			if(body.get(k).get("x").intValue()== squareOfInterest.x + 1 && body.get(k).get("y").intValue() == squareOfInterest.y)
+            				return true;
+            		}//if
+        			
+        			
+        		}//for
+    		}//if
+    		
+    		
+    	}//for
+    	
+    	return false;
+    	
+    }//bodyPartExistsOnThisPoint
 
 }//ENDOFCLASS
