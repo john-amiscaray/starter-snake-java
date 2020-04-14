@@ -500,7 +500,7 @@ public class Snake {
     				&& getDistance(HEAD_LOCATION, body.get(body.size() - 1).get("x").intValue(),
     						body.get(body.size() - 1).get("y").intValue()) <= 4) {
     			
-    			criticalSnakes.add(body);
+    			criticalSnakes.add(snakes.get(i));
     			
     		}//if
     		
