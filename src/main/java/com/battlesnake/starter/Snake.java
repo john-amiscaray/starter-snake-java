@@ -325,26 +325,29 @@ public class Snake {
     	
     	for(int j = 0; j < criticalSnakes.size(); j++) {
     		
-    		for(int k = 0; k < criticalSnakes.get(j).get("body").size(); k++) {
-    			
-    			JsonNode body = criticalSnakes.get(j).get("body");
+    		if(criticalSnakes.get(j) != null) {
+    			for(int k = 0; k < criticalSnakes.get(j).get("body").size(); k++) {
+        			
+        			JsonNode body = criticalSnakes.get(j).get("body");
 
-        		if(direc == 0) {
-        			if(body.get("x").intValue() == HEAD_LOCATION.x && body.get("y").intValue() == HEAD_LOCATION.y - 1)
-        				return true;
-        		}else if(direc == 1) {
-        			if(body.get("x").intValue()== HEAD_LOCATION.x && body.get("y").intValue() == HEAD_LOCATION.y + 1)
-        				return true;
-        		}else if(direc == 2) {
-        			if(body.get("x").intValue() == HEAD_LOCATION.x - 1 && body.get("y").intValue() == HEAD_LOCATION.y)
-        				return true;
-        		}else if(direc == 3) {
-        			if(body.get("x").intValue()== HEAD_LOCATION.x + 1 && body.get("y").intValue() == HEAD_LOCATION.y)
-        				return true;
-        		}//if
-    			
-    			
-    		}//for
+            		if(direc == 0) {
+            			if(body.get("x").intValue() == HEAD_LOCATION.x && body.get("y").intValue() == HEAD_LOCATION.y - 1)
+            				return true;
+            		}else if(direc == 1) {
+            			if(body.get("x").intValue()== HEAD_LOCATION.x && body.get("y").intValue() == HEAD_LOCATION.y + 1)
+            				return true;
+            		}else if(direc == 2) {
+            			if(body.get("x").intValue() == HEAD_LOCATION.x - 1 && body.get("y").intValue() == HEAD_LOCATION.y)
+            				return true;
+            		}else if(direc == 3) {
+            			if(body.get("x").intValue()== HEAD_LOCATION.x + 1 && body.get("y").intValue() == HEAD_LOCATION.y)
+            				return true;
+            		}//if
+        			
+        			
+        		}//for
+    		}//if
+    		
     		
     	}//for
     	
